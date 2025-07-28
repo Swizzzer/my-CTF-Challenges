@@ -1,0 +1,1 @@
+HITCTF{why not lifting this polynomial to a quotient ring and so on}

@@ -1,0 +1,42 @@
+We will abstain from using them here. I want to ensure there are no dark corners
+where magic and confusion can hide, so we’ll write everything by hand. As you’ll
+see, it’s not as bad as it sounds, and it means you really will understand each
+line of code and how both interpreters work.
+A book has different constraints from the “real world” and so the coding style
+here might not always reflect the best way to write maintainable production
+software. If I seem a little cavalier about, say, omitting private or
+declaring a global variable, understand I do so to keep the code easier on your
+eyes. The pages here aren’t as wide as your IDE and every character counts.
+Also, the code doesn’t have many comments. That’s because each handful of lines
+is surrounded by several paragraphs of honest-to-God prose explaining it. When
+you write a book to accompany your program, you are welcome to omit comments
+too. Otherwise, you should probably use a little more than I do.
+While the book contains every line of code and teaches what each means, it does
+not describe the machinery needed to compile and run the interpreter. I assume
+you can slap together a makefile or a project in your IDE of choice in order to
+get the code to run. Those kinds of instructions get out of date quickly, and
+I want this book to age like XO brandy, not backyard hooch.
+A big reason that we’re using C is so I can show you things C is particularly
+good at, but that does mean you’ll need to be pretty comfortable with it. You
+don’t have to be the reincarnation of Dennis Ritchie, but you shouldn’t be
+spooked by pointers either.
+If you aren’t there yet, pick up an introductory book on C and chew through it,
+then come back here when you’re done. In return, you’ll come away from this book
+an even stronger C programmer. That’s useful given how many language
+implementations are written in C: Lua, CPython, and Ruby’s MRI, to name a few.
+In our C interpreter, clox, we are forced to implement
+for ourselves all the things Java gave us for free. We’ll write our own dynamic
+array and hash table. We’ll decide how objects are represented in memory, and
+build a garbage collector to reclaim them.
+Engineers have been building programming languages since the Dark Ages of
+computing. As soon as we could talk to computers, we discovered doing so was too
+hard, and we enlisted their help. I find it fascinating that even though today’s
+machines are literally a million times faster and have orders of magnitude more
+storage, the way we build programming languages is virtually unchanged.
+Though the area explored by language designers is vast, the trails they’ve
+carved through it are few. Not every language takes the
+exact same path—some take a shortcut or two—but otherwise they are
+reassuringly similar, from Rear Admiral Grace Hopper’s first COBOL compiler all
+the way to some hot, new, transpile-to-JavaScript language whose “documentation”
+consists entirely of a single, poorly edited README in a Git repository
+somewhere.

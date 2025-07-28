@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>real Upload</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --neon-blue: #4f46e5;
+            --cyber-pink: #ec4899;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .cyber-card {
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--neon-blue), var(--cyber-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--neon-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: var(--cyber-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            font-family: monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .result-box::before {
+            content: '↳';
+            position: absolute;
+            left: -25px;
+            top: -15px;
+            font-size: 2rem;
+            color: var(--cyber-pink);
+        }
+
+        .error-box {
+            background: #ff475726;
+            border: 2px solid #ff4757;
+            color: #ff4757;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .cyber-card {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cyber-card">
+            <h1>⚡ Easter Egg or Poison?</h1>
+            
+            <form method="POST">
+                <div class="input-group">
+                    <input type="url" name="url" placeholder="https://example.com" required>
+                </div>
+                <button type="submit">Explore ↝</button>
+            </form>
+
+            {% if error %}
+                <div class="error-box">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            {% if result %}
+                <div class="result-box">
+                    <pre>{{ result }}</pre>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
