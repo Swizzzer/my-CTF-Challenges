@@ -1,0 +1,12 @@
+FROM python:3.13-alpine
+
+RUN apk add --no-cache socat && adduser -D -h /home/ctf ctf
+RUN pip install --no-cache-dir pycryptodome gmpy2 sympy
+COPY --chown=ctf:ctf src/chall.py /home/ctf/chall.py
+COPY --chown=ctf:ctf src/secret.py /home/ctf/secret.py
+
+USER ctf
+WORKDIR /home/ctf
+
+
+CMD /init.sh && socat tcp-l:8000,reuseaddr,fork exec:"python3 -u /home/ctf/chall.py",stderr

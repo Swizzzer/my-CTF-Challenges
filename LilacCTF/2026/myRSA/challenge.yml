@@ -1,0 +1,13 @@
+name: myRSA
+author: Swizzer
+category: Crypto
+difficulty: Medium
+description: |-
+  Secrets in this RSA are congruential
+  The polynomial and the beautiful
+  Make up relations in this world
+  Hey
+  Just pick up your Sagemath, Python
+  And be colourful
+  Because this RSA is wonderful
+flag: LilacCTF{wHy_NoT_w4tch1ng_yOutub3_with_NPoYb4mbiOg}
