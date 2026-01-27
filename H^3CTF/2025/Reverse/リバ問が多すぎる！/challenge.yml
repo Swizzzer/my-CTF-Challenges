@@ -1,0 +1,11 @@
+name: リバ問が多すぎる！
+author: Swizzer
+category: Misc/Reverse
+difficulty: Medium
+description: |-
+  リバ問はどこからやってくるのでしょう 自分の脳に問いかけた
+  ニセモノなんか興味はないの 本物だけを解析したい
+hint: 不需要逆向hash/encrypt的具体实现
+flag1: H3CTF{stR3@m_c1Ph3r_15_dAng3R0us}
+flag2: H3CTF{side_ch@nn3l_1s_fun}
+

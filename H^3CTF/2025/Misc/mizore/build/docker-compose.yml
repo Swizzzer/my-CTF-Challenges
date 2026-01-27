@@ -1,0 +1,17 @@
+version: "3.1"
+
+services:
+  app:
+    # container_name:   # container name, only for testing
+    image: mizore   # image name
+    build: ./src
+    platform: linux/amd64
+    environment:
+      - FLAG=H3CTF{4_P0t3nt1al_F4ke_PGD_Att4ck_h1dd3n_1n_0bo3}
+    ports:
+      - "13338:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1500M

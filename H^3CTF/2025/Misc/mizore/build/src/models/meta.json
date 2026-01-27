@@ -1,0 +1,9 @@
+{
+  "classes": [
+    "negative",
+    "positive"
+  ],
+  "positive_class_name": "positive",
+  "negative_class_name": "negative",
+  "img_size": 288
+}

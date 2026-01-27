@@ -1,0 +1,9 @@
+name: 铠冢霙检测器
+author: Swizzer
+category: AI
+difficulty: Easy
+description: |-
+  致敬405杯《奶龙检测器》，不过这次检测的是铠冢霙，你上传的图片和原图的差异限制也更严格了。真的能在L2 norm ≤ 0.5的限制下逃过AI的检测吗？
+
+flag: H3CTF{4_P0t3nt1al_F4ke_PGD_Att4ck_h1dd3n_1n_0bo3}
+
