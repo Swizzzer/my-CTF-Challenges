@@ -1,0 +1,8 @@
+name: myLFSR??
+author: Swizzer & adwa
+category: Crypto
+difficulty: Hard
+description: |-
+  Triple LFSR means triple the security... or triple the vulnerability? Either way, sounds hard enough for my challenge.
+
+flag: QnQSec{Idk_h0w_t0_S0Iv3_MQ_ch4ll3NgE_buT_I_C4n_c0mpUt3_LFSR}

@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  my-poly:
+    build: .
+    container_name: mypoly
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

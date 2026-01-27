@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    container_name: my_lfsr_ii
+    ports:
+      - "33142:8000"
+    restart: unless-stopped

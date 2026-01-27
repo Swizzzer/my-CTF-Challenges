@@ -1,0 +1,8 @@
+name: myLFSR?
+author: Swizzer
+category: Crypto
+difficulty: Warmup
+description: |-
+  A custom LFSR working in GF(3). Computing is easy, predicting is hard. As for getting the flag? That's another story.
+
+flag: QnQSec{i_L1K3_B3RleK4mP_m4Ss3y_0n_m0d_3_f1elD}
