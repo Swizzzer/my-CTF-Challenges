@@ -1,0 +1,3 @@
+能观察到Powershell弹窗的话直接使用火绒剑或者类似的行为监控工具监控PowerShell的行为即可发现其会在C:\Users\Public下面创建一个AAA.txt，里面的内容就是flag。
+
+观察不到的话搜索Visual Studio+RCE也能找到通过.suo实现RCE的案例，所以依葫芦画瓢找到.suo文件后直接反序列化其中的Payload也是可以的。实际上直接base64 decode就能看到flag。

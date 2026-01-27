@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    container_name: breaking
+    ports:
+      - "38512:7860"
+    environment:
+      - GZCTF_FLAG="HITCTF{w0w_s0_sm4rt_it_1s_d33pseek}"
+    restart: unless-stopped

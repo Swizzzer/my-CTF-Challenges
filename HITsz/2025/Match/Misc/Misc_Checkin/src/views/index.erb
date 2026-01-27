@@ -1,0 +1,119 @@
+<!-- views/index.erb -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Tic Tac Toe</title>
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <style>
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+    .cell {
+      aspect-ratio: 1;
+      background: #fff;
+      border: 2px solid #6200ee;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .cell.winning {
+      background: #bbdefb;
+    }
+    .cell:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    #status {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 1.5rem;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="mdc-typography">
+    <h1 class="mdc-typography--headline4 text-center">Tic Tac Toe</h1>
+    
+    <div class="board" id="board"></div>
+    
+    <div id="status"></div>
+    
+    <div class="button-container">
+      <button class="mdc-button mdc-button--raised" id="reset">
+        <span class="mdc-button__label">New Game</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let board = Array(9).fill(null);
+    let gameActive = true;
+
+    function initBoard() {
+      const container = document.getElementById('board');
+      container.innerHTML = '';
+      
+      board.forEach((cell, index) => {
+        const button = document.createElement('button');
+        button.className = 'cell mdc-ripple-surface';
+        button.textContent = cell || '';
+        button.disabled = !gameActive || !!cell;
+        button.addEventListener('click', () => handleMove(index));
+        container.appendChild(button);
+      });
+    }
+
+    async function handleMove(position) {
+      if (!gameActive || board[position] !== null) return;
+
+      const response = await fetch('/move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ position, board })
+      });
+
+      const data = await response.json();
+      board = data.board;
+      if (data.status === 'win') {
+        document.getElementById('status').innerHTML = 
+          `<span style="color: #2e7d32">${data.flag}</span>`;
+        gameActive = false;
+      } else if (data.status === 'lose') {
+        document.getElementById('status').textContent = data.message;
+        gameActive = false;
+      } else if (data.status === 'draw') {
+        document.getElementById('status').textContent = "Game Draw!";
+        gameActive = false;
+      }
+
+      initBoard();
+    }
+
+    document.getElementById('reset').addEventListener('click', () => {
+      board = Array(9).fill(null);
+      gameActive = true;
+      document.getElementById('status').textContent = '';
+      initBoard();
+    });
+
+    initBoard();
+  </script>
+</body>
+</html>
