@@ -9,4 +9,4 @@ USER ctf
 WORKDIR /home/ctf
 
 
-CMD /init.sh && socat tcp-l:8000,reuseaddr,fork exec:"python3 -u /home/ctf/chall.py",stderr
+CMD socat tcp-l:8000,reuseaddr,fork exec:"python3 -u /home/ctf/chall.py",stderr
