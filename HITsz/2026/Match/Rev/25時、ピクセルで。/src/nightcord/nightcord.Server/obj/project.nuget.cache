@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "WKzTv6Sh2SI=",
+  "success": true,
+  "projectFilePath": "/Users/swizzer/Work/Projects/HITszCTF/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Server/nightcord.Server.csproj",
+  "expectedPackageFiles": [
+    "/Users/swizzer/.nuget/packages/microsoft.netcore.app.ref/9.0.15/microsoft.netcore.app.ref.9.0.15.nupkg.sha512",
+    "/Users/swizzer/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.15/microsoft.aspnetcore.app.ref.9.0.15.nupkg.sha512",
+    "/Users/swizzer/.nuget/packages/microsoft.netcore.app.host.osx-arm64/9.0.15/microsoft.netcore.app.host.osx-arm64.9.0.15.nupkg.sha512"
+  ],
+  "logs": []
+}

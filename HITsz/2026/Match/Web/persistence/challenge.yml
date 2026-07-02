@@ -1,0 +1,7 @@
+name: persistence
+author: Swizzer
+category: Web
+difficulty: Easy
+description: |-
+  No file uploads this time! Find a way to persist your code and execute `readflag`
+flag: HITCTF{lOOks_l1ke_biG_file_upl0ad_buff3ring}

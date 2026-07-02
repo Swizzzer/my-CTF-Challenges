@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>和 - Wa</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Zen+Old+Mincho:wght@400;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f5f0e8;
+      font-family: 'Noto Serif JP', 'Zen Old Mincho', serif;
+      color: #2c2c2c;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(200, 100, 100, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(100, 150, 100, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .washi-texture {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 80px;
+      position: relative;
+    }
+
+    .kanji-title {
+      font-size: 8rem;
+      font-weight: 300;
+      color: #8b4513;
+      letter-spacing: -10px;
+      line-height: 1;
+      position: relative;
+      display: inline-block;
+    }
+
+    .kanji-title::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      border: 1px solid rgba(139, 69, 19, 0.2);
+      border-radius: 50%;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      letter-spacing: 15px;
+      margin-top: 30px;
+      font-weight: 300;
+    }
+
+    .ink-brush {
+      width: 150px;
+      height: 3px;
+      margin: 40px auto;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        #2c2c2c 15%,
+        #2c2c2c 85%,
+        transparent 100%);
+      position: relative;
+    }
+
+    .ink-brush::before,
+    .ink-brush::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2c2c2c;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .ink-brush::before { left: 10%; }
+    .ink-brush::after { right: 10%; }
+
+    .poem-section {
+      text-align: center;
+      padding: 60px 0;
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    .poem-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 40px;
+      background: rgba(139, 69, 19, 0.3);
+    }
+
+    .haiku {
+      font-size: 1.6rem;
+      line-height: 2.5;
+      color: #4a4a4a;
+      font-weight: 300;
+    }
+
+    .haiku-author {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #888;
+      letter-spacing: 5px;
+    }
+
+    .season-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      margin: 60px 0;
+    }
+
+    .season-card {
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.5);
+      border-left: 3px solid;
+      position: relative;
+      transition: all 0.5s ease;
+    }
+
+    .season-card:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: translateX(10px);
+    }
+
+    .season-card.spring { border-color: #f8b4c4; }
+    .season-card.summer { border-color: #7cb342; }
+    .season-card.autumn { border-color: #d4a574; }
+    .season-card.winter { border-color: #90a4ae; }
+
+    .season-card h3 {
+      font-size: 2rem;
+      font-weight: 300;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .season-card.spring h3 { color: #c2185b; }
+    .season-card.summer h3 { color: #388e3c; }
+    .season-card.autumn h3 { color: #bf360c; }
+    .season-card.winter h3 { color: #455a64; }
+
+    .season-reading {
+      font-size: 0.8rem;
+      color: #888;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    .season-card p {
+      color: #666;
+      line-height: 2;
+      font-size: 0.95rem;
+    }
+
+    .zen-section {
+      text-align: center;
+      padding: 80px 40px;
+      margin: 60px 0;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(139, 69, 19, 0.03) 50%,
+        transparent 100%);
+      position: relative;
+    }
+
+    .enso {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 40px;
+      border: 3px solid #2c2c2c;
+      border-radius: 50%;
+      position: relative;
+      opacity: 0.7;
+    }
+
+    .enso::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      right: 20px;
+      width: 30px;
+      height: 10px;
+      background: #f5f0e8;
+    }
+
+    .zen-quote {
+      font-size: 1.4rem;
+      color: #4a4a4a;
+      font-weight: 300;
+      line-height: 2;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 60px;
+      padding: 15px 50px;
+      background: transparent;
+      border: 1px solid #8b4513;
+      color: #8b4513;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      background: #8b4513;
+      color: #f5f0e8;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 100px;
+      padding: 40px;
+      border-top: 1px solid rgba(139, 69, 19, 0.2);
+    }
+
+    footer p {
+      color: #888;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+    }
+
+    .decoration-left,
+    .decoration-right {
+      position: fixed;
+      width: 60px;
+      height: 300px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    .decoration-left {
+      left: 20px;
+      border-left: 2px solid #8b4513;
+      border-top: 2px solid #8b4513;
+      border-bottom: 2px solid #8b4513;
+    }
+
+    .decoration-right {
+      right: 20px;
+      border-right: 2px solid #8b4513;
+      border-top: 2px solid #8b4513;
+      border-bottom: 2px solid #8b4513;
+    }
+  </style>
+</head>
+<body>
+  <div class="washi-texture"></div>
+  <div class="decoration-left"></div>
+  <div class="decoration-right"></div>
+
+  <div class="container">
+    <header>
+      <div class="kanji-title">和</div>
+      <p class="subtitle">HARMONY</p>
+      <div class="ink-brush"></div>
+    </header>
+
+    <section class="poem-section">
+      <div class="haiku">
+        古池や<br>
+        蛙飛び込む<br>
+        水の音
+      </div>
+      <p class="haiku-author">— 松尾芭蕉</p>
+    </section>
+
+    <section class="season-grid">
+      <div class="season-card spring">
+        <h3>春</h3>
+        <p class="season-reading">はる / Haru</p>
+        <p>Cherry blossoms drift softly in the breeze. A time of renewal and gentle beginnings, when nature awakens from winter's sleep.</p>
+      </div>
+
+      <div class="season-card summer">
+        <h3>夏</h3>
+        <p class="season-reading">なつ / Natsu</p>
+        <p>Cicadas sing beneath the sweltering sun. The verdant mountains stand tall, alive with the energy of the season's peak.</p>
+      </div>
+
+      <div class="season-card autumn">
+        <h3>秋</h3>
+        <p class="season-reading">あき / Aki</p>
+        <p>Crimson leaves paint the mountainside. A melancholic beauty pervades as nature prepares for its restful slumber.</p>
+      </div>
+
+      <div class="season-card winter">
+        <h3>冬</h3>
+        <p class="season-reading">ふゆ / Fuyu</p>
+        <p>Snow blankets the silent world. In stillness, we find peace. The bare branches hold the promise of spring's return.</p>
+      </div>
+    </section>
+
+    <section class="zen-section">
+      <div class="enso"></div>
+      <p class="zen-quote">
+        「一期一会」<br><br>
+        Every encounter is a once-in-a-lifetime moment.<br>
+        Treasure each meeting, for it shall never recur.
+      </p>
+    </section>
+
+    <div style="text-align: center;">
+      <a href="/" class="back-link">戻る</a>
+    </div>
+
+    <footer>
+      <p>侘寂 — WABI-SABI — Finding beauty in imperfection</p>
+    </footer>
+  </div>
+</body>
+</html>

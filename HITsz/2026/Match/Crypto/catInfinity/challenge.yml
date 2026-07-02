@@ -1,0 +1,10 @@
+name: catInfinity
+author: Swizzer
+category: Crypto
+difficulty: Medium
+description: |-
+  Fell asleep in a shelter
+  Made out of old math
+  After the encryption
+  No clue where we're flying to
+flag: HITCTF{The Lenstra ghosts banished from my ECC diary}

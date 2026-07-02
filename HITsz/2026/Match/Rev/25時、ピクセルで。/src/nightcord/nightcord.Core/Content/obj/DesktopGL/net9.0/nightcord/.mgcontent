@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Backgrounds/Background.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Tiles/BlockA1.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Tiles/BlockB1.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Tiles/Exit.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Sprites/blank.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Sprites/toxic.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Fonts/Hud.spritefont</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Sprites/Player/Idle.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Sprites/Player/Run.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Sprites/Player/Celebrate.png</File>
+    <File>/Volumes/Nozomi/Work/Projects/HITszCTF-2026/Reverse/25時、ピクセルで。/src/nightcord/nightcord.Core/Content/Sprites/Player/Die.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>

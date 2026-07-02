@@ -1,0 +1,7 @@
+name: veriJail 2
+author: Swizzer
+category: Misc
+difficulty: Hard
+description: |-
+  Of course you can do RCE, but what if in a more jailed environment?
+flag: HITCTF{Swizzer is listening to Let Down by Radiohead}

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block Journal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    :root {
+      --sky: #8fd1ff;
+      --grass-light: #9bd680;
+      --grass: #6fa453;
+      --dirt: #4b3522;
+      --wood: #caa76b;
+      --wood-dark: #3b2816;
+      --stone: #5c6b70;
+      --outline: #1c1207;
+      --parchment: #f1e3c4;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      image-rendering: pixelated;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, var(--sky) 0%, var(--sky) 55%, var(--grass-light) 55%, var(--grass) 58%, #5f8a41 60%, var(--dirt) 100%);
+      font-family: 'Press Start 2P', monospace;
+      color: #f7f0d0;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-size: 12px 12px;
+      background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+      z-index: 1;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 110px;
+      background:
+        linear-gradient(#5f8a41 0 18px, #4f7436 18px 26px, var(--dirt) 26px 110px),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.08) 0 16px, transparent 16px 32px);
+      box-shadow: 0 -10px 0 #2d1a0c;
+      z-index: 2;
+    }
+
+    .cloud-layer {
+      position: fixed;
+      top: 28px;
+      left: 0;
+      width: 100%;
+      height: 220px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cloud {
+      position: absolute;
+      width: 96px;
+      height: 32px;
+      background: #fff;
+      box-shadow:
+        16px 0 0 #fff,
+        32px 0 0 #fff,
+        48px 0 0 #fff,
+        0 -16px 0 #fff,
+        16px -16px 0 #fff,
+        32px -16px 0 #fff,
+        16px 16px 0 #fff,
+        32px 16px 0 #fff;
+      opacity: 0.85;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 140px;
+      position: relative;
+      z-index: 3;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding: 32px 24px 40px;
+      background: var(--wood);
+      border: 6px solid var(--outline);
+      box-shadow: 0 0 0 6px #f0d7a1, 0 12px 0 rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    header::before,
+    header::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #e0c27b;
+      border: 3px solid var(--outline);
+      box-shadow: 0 0 0 3px #f7e5b9;
+    }
+
+    header::before { top: -14px; left: 18px; }
+    header::after { bottom: -14px; right: 18px; }
+
+    h1 {
+      font-size: 1.7rem;
+      color: var(--outline);
+      text-shadow: 4px 4px 0 #f0d7a1;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 0.65rem;
+      color: #275018;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 0 #f7e5b9;
+    }
+
+    .health-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 32px 0;
+      padding: 18px 20px;
+      background: linear-gradient(180deg, #6f5535 0%, #4d331c 100%);
+      border: 6px solid var(--outline);
+      box-shadow: 0 0 0 4px #d4b883 inset, 0 12px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .health-label {
+      color: #f0d7a1;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+    }
+
+    .health-container {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .pixel-heart {
+      width: 10px;
+      height: 10px;
+      background: #d82128;
+      box-shadow:
+        10px 0 #d82128,
+        20px 0 #d82128,
+        0 10px #d82128,
+        10px 10px #ff4f56,
+        20px 10px #ff4f56,
+        30px 10px #d82128,
+        -10px 10px #d82128,
+        0 20px #d82128,
+        10px 20px #ff4f56,
+        20px 20px #ff4f56,
+        30px 20px #d82128,
+        -10px 20px #d82128,
+        0 30px #d82128,
+        10px 30px #d82128,
+        20px 30px #d82128,
+        10px 40px #d82128;
+      transform: scale(0.55);
+      transform-origin: left top;
+      filter: drop-shadow(0 2px 0 #541515);
+      animation: throb 1s ease-in-out infinite;
+    }
+
+    .pixel-heart.empty {
+      filter: grayscale(1) brightness(0.45);
+      opacity: 0.6;
+    }
+
+    @keyframes throb {
+      0%, 100% { transform: scale(0.55); }
+      50% { transform: scale(0.6); }
+    }
+
+    .menu-box {
+      background: #494949;
+      border: 6px solid var(--outline);
+      margin: 24px 0 32px;
+      position: relative;
+      box-shadow: 0 0 0 4px #9ea9a3 inset, 0 12px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .menu-box::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 3px solid #282828;
+      pointer-events: none;
+    }
+
+    .menu-title {
+      background: #2f2f2f;
+      color: #d2f89b;
+      font-size: 0.65rem;
+      padding: 12px 16px;
+      display: inline-block;
+      position: absolute;
+      top: -16px;
+      left: 24px;
+      border: 4px solid var(--outline);
+      box-shadow: 0 0 0 3px #9ea9a3 inset;
+    }
+
+    .menu-content {
+      padding: 32px 26px 26px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: #3b3b3b;
+      border: 4px solid #1c1c1c;
+      box-shadow: inset 0 0 0 3px #6f6f6f, inset 0 0 0 6px #2a2a2a;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-4px);
+      border-color: #d2f89b;
+      box-shadow: inset 0 0 0 3px #d2f89b, inset 0 0 0 6px #2a2a2a, 0 6px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    .arrow {
+      color: #d2f89b;
+      font-size: 0.8rem;
+      text-shadow: 2px 2px 0 #1c1c1c;
+    }
+
+    .item-icon {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      background: #c8b381;
+      border: 4px solid var(--outline);
+      box-shadow: inset 0 0 0 4px #f0d7a1;
+    }
+
+    .item-text {
+      flex: 1;
+    }
+
+    .item-name {
+      font-size: 0.7rem;
+      color: #e9f6c1;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .item-desc {
+      font-size: 0.55rem;
+      color: #c7d0bf;
+      line-height: 1.6;
+    }
+
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin: 32px 0;
+    }
+
+    .stat-box {
+      background: #4a4a4a;
+      border: 6px solid #1c1c1c;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: 0 0 0 4px #7a8384 inset, 0 10px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      color: #d2f89b;
+      margin-bottom: 6px;
+    }
+
+    .stat-name {
+      font-size: 0.55rem;
+      color: #dcdcdc;
+      letter-spacing: 1px;
+    }
+
+    .pixel-divider {
+      height: 14px;
+      margin: 36px 0;
+      background:
+        linear-gradient(#7db95f 0 50%, #5b3c23 50% 100%),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0 12px, transparent 12px 24px);
+      border: 4px solid var(--outline);
+      box-shadow: 0 0 0 4px #caa76b inset;
+    }
+
+    .quest-log {
+      background: var(--parchment);
+      border: 6px solid #6b4b2c;
+      padding: 26px;
+      margin: 32px 0;
+      box-shadow: 0 0 0 6px #f9f1dc inset, 0 10px 0 rgba(0, 0, 0, 0.25);
+      color: #2e2114;
+    }
+
+    .quest-log h3 {
+      color: #6b4b2c;
+      font-size: 0.8rem;
+      margin-bottom: 18px;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+
+    .quest-item {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 2px solid #d3c09b;
+    }
+
+    .quest-item:last-child {
+      border-bottom: none;
+    }
+
+    .quest-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 3px solid #6b4b2c;
+      background: #caa76b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: #6b4b2c;
+      box-shadow: inset 0 0 0 3px #f9e4c5;
+    }
+
+    .quest-checkbox.complete {
+      background: #7bcf6b;
+      border-color: #2f5c2a;
+      color: #0e2a0e;
+      box-shadow: inset 0 0 0 3px #bde6a8;
+    }
+
+    .quest-text {
+      font-size: 0.6rem;
+      color: #2e2114;
+      line-height: 1.8;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 14px 28px;
+      background: var(--wood);
+      border: 6px solid var(--outline);
+      color: var(--outline);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      box-shadow: 0 0 0 4px #f0d7a1 inset, 0 10px 0 rgba(0, 0, 0, 0.35);
+      transition: transform 0.1s ease;
+      position: relative;
+    }
+
+    .back-link:hover {
+      transform: translateY(-4px);
+    }
+
+    .back-link:active {
+      transform: translateY(0);
+      box-shadow: 0 0 0 4px #f0d7a1 inset, 0 2px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      padding: 20px;
+      color: #d4c6a5;
+      text-shadow: 2px 2px 0 #332719;
+    }
+
+    footer p {
+      font-size: 0.55rem;
+    }
+
+    .coin {
+      display: inline-block;
+      animation: spin-coin 1s steps(8) infinite;
+    }
+
+    @keyframes spin-coin {
+      0% { transform: scaleX(1); }
+      50% { transform: scaleX(-1); }
+      100% { transform: scaleX(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="cloud-layer">
+    <div class="cloud" style="top: 34px; left: 8%;"></div>
+    <div class="cloud" style="top: 78px; left: 32%;"></div>
+    <div class="cloud" style="top: 26px; left: 62%;"></div>
+    <div class="cloud" style="top: 110px; left: 78%;"></div>
+    <div class="cloud" style="top: 140px; left: 12%;"></div>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>BLOCK JOURNAL</h1>
+      <p class="subtitle">SURVIVAL MODE · PIXEL EDITION</p>
+    </header>
+
+    <div class="health-bar">
+      <span class="health-label">HEALTH</span>
+      <div class="health-container">
+        <div class="pixel-heart"></div>
+        <div class="pixel-heart"></div>
+        <div class="pixel-heart"></div>
+        <div class="pixel-heart empty"></div>
+        <div class="pixel-heart empty"></div>
+      </div>
+    </div>
+
+    <div class="menu-box">
+      <span class="menu-title">INVENTORY</span>
+      <div class="menu-content">
+        <div class="menu-item">
+          <span class="arrow">▶</span>
+          <span class="item-icon">⛏️</span>
+          <div class="item-text">
+            <div class="item-name">NEW WORLD</div>
+            <div class="item-desc">Generate a fresh blocky adventure</div>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <span class="arrow">▶</span>
+          <span class="item-icon">🗺️</span>
+          <div class="item-text">
+            <div class="item-name">LOAD WORLD</div>
+            <div class="item-desc">Resume your saved chunks</div>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <span class="arrow">▶</span>
+          <span class="item-icon">⚙️</span>
+          <div class="item-text">
+            <div class="item-name">GAME RULES</div>
+            <div class="item-desc">Adjust survival settings & packs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <div class="stat-box">
+        <div class="stat-icon">💎</div>
+        <div class="stat-value">64</div>
+        <div class="stat-name">EMERALDS</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-icon">✨</div>
+        <div class="stat-value">LV.30</div>
+        <div class="stat-name">XP LEVEL</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-icon">⛏️</div>
+        <div class="stat-value">12,480</div>
+        <div class="stat-name">BLOCKS MINED</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-icon">🌾</div>
+        <div class="stat-value">PLAINS</div>
+        <div class="stat-name">CURRENT BIOME</div>
+      </div>
+    </div>
+
+    <div class="pixel-divider"></div>
+
+    <div class="quest-log">
+      <h3>📖 QUEST LOG</h3>
+
+      <div class="quest-item">
+        <div class="quest-checkbox complete">✓</div>
+        <div class="quest-text">Punch a tree and craft your first planks</div>
+      </div>
+
+      <div class="quest-item">
+        <div class="quest-checkbox complete">✓</div>
+        <div class="quest-text">Light up the starter base with torches</div>
+      </div>
+
+      <div class="quest-item">
+        <div class="quest-checkbox"></div>
+        <div class="quest-text">Smelt iron and craft a shield</div>
+      </div>
+
+      <div class="quest-item">
+        <div class="quest-checkbox"></div>
+        <div class="quest-text">Find a fortress and brew awkward potions</div>
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="/" class="back-link">← BACK TO VILLAGE</a>
+    </div>
+
+    <footer>
+      <p>Remember to sleep before the phantoms swoop.</p>
+      <p style="margin-top: 10px;">© BLOCK JOURNAL · KEEP IT CHUNKY</p>
+    </footer>
+  </div>
+</body>
+</html>

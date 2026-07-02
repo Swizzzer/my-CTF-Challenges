@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeriJail 2 - File & Command Interface</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #1565c0;
+      --primary-light: #42a5f5;
+      --accent: #ff4081;
+      --success: #4caf50;
+      --error: #f44336;
+      --warning: #ff9800;
+      --background: #fafafa;
+      --surface: #ffffff;
+      --text-primary: rgba(0, 0, 0, 0.87);
+      --text-secondary: rgba(0, 0, 0, 0.6);
+      --divider: rgba(0, 0, 0, 0.12);
+      --shadow-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+      --shadow-2: 0 4px 8px rgba(0, 0, 0, 0.12);
+      --shadow-3: 0 8px 16px rgba(0, 0, 0, 0.14);
+      --shadow-4: 0 12px 24px rgba(0, 0, 0, 0.16);
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text-primary);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: var(--shadow-4);
+      overflow: hidden;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .card-header h1 {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .card-header p {
+      opacity: 0.9;
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .tabs {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 1px solid var(--divider);
+      position: relative;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .tab.active {
+      color: var(--primary);
+    }
+
+    .tab-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: var(--primary);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 50%;
+    }
+
+    .tab-indicator.right {
+      transform: translateX(100%);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 32px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--divider);
+      border-radius: 8px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: var(--surface);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--shadow-2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      box-shadow: var(--shadow-3);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(25, 118, 210, 0.04);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .response-area {
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      display: none;
+      animation: slideDown 0.3s ease;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .response-area.show {
+      display: block;
+    }
+
+    .response-area.success {
+      background: rgba(76, 175, 80, 0.1);
+      border-left: 4px solid var(--success);
+      color: #2e7d32;
+    }
+
+    .response-area.error {
+      background: rgba(244, 67, 54, 0.1);
+      border-left: 4px solid var(--error);
+      color: #c62828;
+    }
+
+    .loader {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .hint .material-icons {
+      font-size: 16px;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 32px;
+      border: 2px dashed var(--divider);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--background);
+    }
+
+    .file-input-label:hover {
+      border-color: var(--primary);
+      background: rgba(25, 118, 210, 0.04);
+    }
+
+    .file-input-label .material-icons {
+      font-size: 32px;
+      color: var(--text-secondary);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-info {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(25, 118, 210, 0.04);
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .file-info.show {
+      display: flex;
+    }
+
+    .file-info .material-icons {
+      color: var(--primary);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0;
+      }
+
+      .card {
+        border-radius: 0;
+      }
+
+      .tab-content {
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h1>
+          <span class="material-icons">code</span>
+          VeriJail 2
+        </h1>
+        <p>File Writing & Command Execution Interface</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab(0)">
+          <span class="material-icons" style="font-size: 18px; vertical-align: middle;">description</span>
+          Write File
+        </button>
+        <button class="tab" onclick="switchTab(1)">
+          <span class="material-icons" style="font-size: 18px; vertical-align: middle;">terminal</span>
+          Execute Command
+        </button>
+        <div class="tab-indicator"></div>
+      </div>
+
+      <div class="tab-content active" id="write-file">
+        <form id="writeFileForm" onsubmit="handleWriteFile(event)">
+          <div class="form-group">
+            <label for="filename">Filename (optional)</label>
+            <input type="text" id="filename" name="filename" placeholder="Leave empty for random name">
+            <div class="hint">
+              <span class="material-icons">info</span>
+              <span>If not specified, a random filename will be generated</span>
+            </div>
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="fileInput" class="file-input-label">
+              <span class="material-icons">cloud_upload</span>
+              <span>Click to select a file or drag and drop</span>
+            </label>
+            <input type="file" id="fileInput" onchange="handleFileSelect(event)">
+            <div class="file-info" id="fileInfo">
+              <span class="material-icons">insert_drive_file</span>
+              <span id="fileName"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="content">File Content</label>
+            <textarea id="content" name="content" placeholder="Enter file content here..."></textarea>
+            <div class="hint">
+              <span class="material-icons">info</span>
+              <span>You can either upload a file or type content directly</span>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="clearWriteForm()">
+              <span class="material-icons" style="font-size: 18px;">clear</span>
+              Clear
+            </button>
+            <button type="submit" class="btn btn-primary" id="writeBtn">
+              <span class="material-icons" style="font-size: 18px;">save</span>
+              Write File
+            </button>
+          </div>
+
+          <div class="response-area" id="writeResponse"></div>
+        </form>
+      </div>
+
+      <div class="tab-content" id="execute-command">
+        <form id="executeForm" onsubmit="handleExecute(event)">
+          <div class="form-group">
+            <label for="cmd">Command</label>
+            <input type="text" id="cmd" name="cmd" placeholder="Enter command to execute" required>
+            <div class="hint">
+              <span class="material-icons">warning</span>
+              <span>Max 4 characters</span>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="clearExecuteForm()">
+              <span class="material-icons" style="font-size: 18px;">clear</span>
+              Clear
+            </button>
+            <button type="submit" class="btn btn-primary" id="executeBtn">
+              <span class="material-icons" style="font-size: 18px;">play_arrow</span>
+              Execute
+            </button>
+          </div>
+
+          <div class="response-area" id="executeResponse"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(index) {
+      const tabs = document.querySelectorAll('.tab');
+      const contents = document.querySelectorAll('.tab-content');
+      const indicator = document.querySelector('.tab-indicator');
+
+      tabs.forEach((tab, i) => {
+        tab.classList.toggle('active', i === index);
+      });
+
+      contents.forEach((content, i) => {
+        content.classList.toggle('active', i === index);
+      });
+
+      if (index === 1) {
+        indicator.classList.add('right');
+      } else {
+        indicator.classList.remove('right');
+      }
+    }
+
+    let selectedFile = null;
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        selectedFile = file;
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileInfo').classList.add('show');
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('content').value = e.target.result;
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    function clearWriteForm() {
+      document.getElementById('filename').value = '';
+      document.getElementById('content').value = '';
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileInfo').classList.remove('show');
+      document.getElementById('writeResponse').classList.remove('show');
+      selectedFile = null;
+    }
+
+    function clearExecuteForm() {
+      document.getElementById('cmd').value = '';
+      document.getElementById('executeResponse').classList.remove('show');
+    }
+
+    async function handleWriteFile(event) {
+      event.preventDefault();
+
+      const filename = document.getElementById('filename').value;
+      const content = document.getElementById('content').value;
+      const btn = document.getElementById('writeBtn');
+      const responseArea = document.getElementById('writeResponse');
+
+      if (!content && !selectedFile) {
+        showResponse(responseArea, 'Please provide file content or select a file', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader"></span> Writing...';
+
+      try {
+        let dataToSend;
+        if (selectedFile) {
+          dataToSend = await selectedFile.arrayBuffer();
+        } else {
+          dataToSend = content;
+        }
+
+        const url = filename ? `/writefile?filename=${encodeURIComponent(filename)}` : '/writefile';
+        const response = await fetch(url, {
+          method: 'POST',
+          body: dataToSend
+        });
+
+        const result = await response.text();
+
+        if (response.ok) {
+          showResponse(responseArea, result, 'success');
+          setTimeout(() => {
+            clearWriteForm();
+          }, 2000);
+        } else {
+          showResponse(responseArea, `Error: ${result}`, 'error');
+        }
+      } catch (error) {
+        showResponse(responseArea, `Error: ${error.message}`, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-icons" style="font-size: 18px;">save</span> Write File';
+      }
+    }
+
+    async function handleExecute(event) {
+      event.preventDefault();
+
+      const cmd = document.getElementById('cmd').value;
+      const btn = document.getElementById('executeBtn');
+      const responseArea = document.getElementById('executeResponse');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader"></span> Executing...';
+
+      try {
+        const response = await fetch(`/execute?cmd=${encodeURIComponent(cmd)}`);
+        const result = await response.text();
+
+        if (response.ok) {
+          showResponse(responseArea, result || 'Command executed successfully (no output)', 'success');
+        } else {
+          showResponse(responseArea, `Error: ${result}`, 'error');
+        }
+      } catch (error) {
+        showResponse(responseArea, `Error: ${error.message}`, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-icons" style="font-size: 18px;">play_arrow</span> Execute';
+      }
+    }
+
+    function showResponse(element, message, type) {
+      element.className = 'response-area show ' + type;
+      element.textContent = message;
+    }
+
+    // Drag and drop support
+    const fileInputLabel = document.querySelector('.file-input-label');
+
+    fileInputLabel.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileInputLabel.style.borderColor = 'var(--primary)';
+      fileInputLabel.style.background = 'rgba(25, 118, 210, 0.04)';
+    });
+
+    fileInputLabel.addEventListener('dragleave', () => {
+      fileInputLabel.style.borderColor = '';
+      fileInputLabel.style.background = '';
+    });
+
+    fileInputLabel.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileInputLabel.style.borderColor = '';
+      fileInputLabel.style.background = '';
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        const file = files[0];
+        selectedFile = file;
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileInfo').classList.add('show');
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('content').value = e.target.result;
+        };
+        reader.readAsText(file);
+      }
+    });
+  </script>
+</body>
+
+</html>

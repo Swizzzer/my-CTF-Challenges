@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEON CITY 2077</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #0a0a0f;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(90deg, transparent 98%, rgba(0, 255, 255, 0.03) 98%),
+        linear-gradient(0deg, transparent 98%, rgba(0, 255, 255, 0.03) 98%);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .glitch-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg,
+        #0a0a0f 0%,
+        #1a0a2e 30%,
+        #0f1a2e 60%,
+        #0a0a0f 100%);
+      z-index: -1;
+    }
+
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.3) 2px,
+        rgba(0, 0, 0, 0.3) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: 4rem;
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      position: relative;
+      animation: glitch 2s infinite;
+    }
+
+    h1::before,
+    h1::after {
+      content: 'NEON CITY';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    h1::before {
+      color: #ff00ff;
+      animation: glitch-1 0.3s infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+      transform: translate(-2px, -2px);
+    }
+
+    h1::after {
+      color: #00ffff;
+      animation: glitch-2 0.3s infinite;
+      clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+      transform: translate(2px, 2px);
+    }
+
+    @keyframes glitch-1 {
+      0%, 100% { transform: translate(-2px, -2px); }
+      25% { transform: translate(2px, 0px); }
+      50% { transform: translate(-1px, 2px); }
+      75% { transform: translate(1px, -1px); }
+    }
+
+    @keyframes glitch-2 {
+      0%, 100% { transform: translate(2px, 2px); }
+      25% { transform: translate(-2px, 1px); }
+      50% { transform: translate(1px, -2px); }
+      75% { transform: translate(-1px, 1px); }
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      color: #00ffff;
+      letter-spacing: 15px;
+      margin-top: 20px;
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff;
+    }
+
+    .neon-line {
+      width: 80%;
+      height: 2px;
+      margin: 30px auto;
+      background: linear-gradient(90deg,
+        transparent,
+        #ff00ff,
+        #00ffff,
+        #ff00ff,
+        transparent);
+      box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .cyber-card {
+      background: linear-gradient(135deg,
+        rgba(255, 0, 255, 0.1) 0%,
+        rgba(0, 255, 255, 0.05) 100%);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      padding: 30px;
+      position: relative;
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+      transition: all 0.3s ease;
+    }
+
+    .cyber-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg,
+        transparent 40%,
+        rgba(0, 255, 255, 0.1) 50%,
+        transparent 60%);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .cyber-card:hover {
+      border-color: #ff00ff;
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.3),
+                  inset 0 0 30px rgba(0, 255, 255, 0.1);
+      transform: translateY(-5px);
+    }
+
+    .cyber-card h3 {
+      font-family: 'Orbitron', monospace;
+      color: #ff00ff;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #ff00ff;
+    }
+
+    .cyber-card p {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .cyber-card .tag {
+      display: inline-block;
+      padding: 5px 15px;
+      background: rgba(0, 255, 255, 0.2);
+      border: 1px solid #00ffff;
+      color: #00ffff;
+      font-size: 0.8rem;
+      margin-top: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-around;
+      margin: 60px 0;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.5);
+      border-left: 3px solid #ff00ff;
+      border-right: 3px solid #00ffff;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Orbitron', monospace;
+      font-size: 3rem;
+      font-weight: 900;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .stat-label {
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-top: 10px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 40px;
+      padding: 15px 40px;
+      background: transparent;
+      border: 2px solid #ff00ff;
+      color: #ff00ff;
+      text-decoration: none;
+      font-family: 'Orbitron', monospace;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.4), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .back-link:hover::before {
+      left: 100%;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 0, 255, 0.2);
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+      text-shadow: 0 0 10px #ff00ff;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 80px;
+      padding: 30px;
+      border-top: 1px solid rgba(0, 255, 255, 0.2);
+    }
+
+    footer p {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="glitch-bg"></div>
+  <div class="scanlines"></div>
+
+  <div class="container">
+    <header>
+      <h1>NEON CITY</h1>
+      <p class="subtitle">2 0 7 7</p>
+      <div class="neon-line"></div>
+    </header>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number">2.4M</div>
+        <div class="stat-label">Citizens</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">847</div>
+        <div class="stat-label">Megacorps</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">99.7%</div>
+        <div class="stat-label">Connected</div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="cyber-card">
+        <h3>// NEURAL INTERFACE</h3>
+        <p>Direct brain-computer connectivity. Upload your consciousness to the net. Experience reality beyond the physical realm.</p>
+        <span class="tag">BIOTECH</span>
+      </div>
+
+      <div class="cyber-card">
+        <h3>// CHROME UPGRADES</h3>
+        <p>Military-grade cybernetic enhancements. Stronger. Faster. Better. Become more than human in the neon-lit streets.</p>
+        <span class="tag">CYBERWARE</span>
+      </div>
+
+      <div class="cyber-card">
+        <h3>// DATA HEIST</h3>
+        <p>Corporate secrets waiting to be extracted. High risk, higher reward. Jack in and take what's yours.</p>
+        <span class="tag">NETRUNNING</span>
+      </div>
+
+      <div class="cyber-card">
+        <h3>// NIGHT MARKETS</h3>
+        <p>Underground bazaars pulse with illegal mods and black-market tech. Everything has a price in the shadow economy.</p>
+        <span class="tag">COMMERCE</span>
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="/" class="back-link">[ Return to Hub ]</a>
+    </div>
+
+    <footer>
+      <p>NEON CITY SYSTEMS // ALL RIGHTS RESERVED // 2077</p>
+    </footer>
+  </div>
+</body>
+</html>
