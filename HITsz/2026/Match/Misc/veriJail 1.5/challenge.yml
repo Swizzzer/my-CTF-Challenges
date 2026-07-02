@@ -1,0 +1,7 @@
+name: veriJail 1.5
+author: Swizzer
+category: Web
+difficulty: Easy
+description: |-
+  Of course you can do RCE... Wait, RCE in a Web Challenge? Sounds too dangerous😨
+flag: flag{https://www.youtube.com/watch?v=vnw8zURAxkU}
